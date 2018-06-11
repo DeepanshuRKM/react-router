@@ -29,23 +29,33 @@ class Blogs extends Component {
 }
 
 class AboutUs extends Component {
-    componentDidMount = () => {
-        setTimeout(function(){
-            history.push("")
-            history.listen(() => this.forceUpdate());
-        }.bind(this),5000);
+    constructor(props){
+        super(props);
+        this.state = {component: <div>
+            <Card>
+                <CardContent>
+                    <Typography gutterBottom variant="headline" component="h2">
+                        Our work defines us, transporting you to our Portfolio.
+                    </Typography>
+                </CardContent>
+            </Card>
+        </div>, wait_time: 5000};
     }
+
+    componentDidMount = () => {
+        this.interval = setTimeout(function(){
+            history.push("");
+            this.setState({component: '', wait_time: 0});
+        }.bind(this),this.state.wait_time);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+    
     render() {
         return (
-            <div>
-                <Card>
-                    <CardContent>
-                        <Typography gutterBottom variant="headline" component="h2">
-                            Our work defines us, transporting you to our Portfolio.
-                        </Typography>
-                    </CardContent>
-                </Card>
-            </div>
+            this.state.component
         )
     }
 }
